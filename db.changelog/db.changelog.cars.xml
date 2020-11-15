@@ -7,6 +7,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <include file="/db.changelog/db.changelog.items.xml"></include>
-    <include file="/db.changelog/db.changelog.cars.xml"></include>
+    <changeSet  id="1"  author="kirill">
+        <createTable  tableName="cars">
+            <column  name="id"  type="serial"  autoIncrement="true">
+                <constraints  primaryKey="true"  nullable="false"/>
+            </column>
+            <column  name="model"  type="VARCHAR(255)"/>
+            <column  name="created"  type="timestamp"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
