@@ -5,6 +5,9 @@ sudo: false
 jdk: 
   - openjdk14
 
+script:
+  - mvn clean compile
+
 after_success:
 - export CODECOV_TOKEN="2b6c4de9-43e8-4813-bad1-dc7ec26aa3f5"
 - bash <(curl -s https://codecov.io/bash)
