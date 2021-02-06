@@ -29,5 +29,9 @@
 		<mapping class="ru.job4j.manytomany.Address" />
 		<mapping class="ru.job4j.book.Author" />
 		<mapping class="ru.job4j.book.Book" />
+		<mapping class="ru.job4j.lazy.Category" />
+		<mapping class="ru.job4j.lazy.Task" />
+		<mapping class="ru.job4j.carLazy.ModelCarLazy" />
+		<mapping class="ru.job4j.carLazy.MarkCarLazy" />
 	</session-factory>
 </hibernate-configuration>
