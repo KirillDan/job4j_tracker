@@ -50,7 +50,7 @@ public class HbmTracker implements Store, AutoCloseable {
     public List<Item> findAll() {
     	Session session = this.sf.openSession();
     	session.beginTransaction();
-    	List<Item> result = session.createQuery("SELECT i FROM Item i").getResultList();
+    	List<Item> result = session.createQuery("SELECT i FROM Item i", Item.class).getResultList();
     	session.getTransaction().commit();
     	session.close();
         return result;
