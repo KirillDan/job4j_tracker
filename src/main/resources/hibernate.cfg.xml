@@ -16,6 +16,7 @@
 		<property name="show_sql">true</property>
 		<property name="format_sql">true</property>
 		<property name="use_sql_comments">true</property>
+		<property name="hibernate.jdbc.time_zone">Africa/Addis_Ababa</property>
 
 		<mapping class="ru.job4j.tracker.Item" />
 		<mapping class="ru.job4j.config.Car" />
@@ -33,5 +34,6 @@
 		<mapping class="ru.job4j.lazy.Task" />
 		<mapping class="ru.job4j.carLazy.ModelCarLazy" />
 		<mapping class="ru.job4j.carLazy.MarkCarLazy" />
+		<mapping class="ru.job4j.hibernate.date.Product" />
 	</session-factory>
 </hibernate-configuration>
