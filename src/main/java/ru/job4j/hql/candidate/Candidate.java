@@ -3,8 +3,10 @@ package ru.job4j.hql.candidate;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Candidate {
@@ -14,6 +16,9 @@ public class Candidate {
 	private String name;
 	private int experience;
 	private int salary;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private BaseOfVacancies base;
 	
 	public static Candidate of(String name, int experience, int salary) {
 		Candidate c = new Candidate();
@@ -54,7 +59,16 @@ public class Candidate {
 	public void setSalary(int salary) {
 		this.salary = salary;
 	}
+	
 
+	public BaseOfVacancies getBase() {
+		return base;
+	}
+
+	public void setBase(BaseOfVacancies base) {
+		this.base = base;
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -83,6 +97,7 @@ public class Candidate {
 
 	@Override
 	public String toString() {
-		return "Candidate [id=" + id + ", name=" + name + ", experience=" + experience + ", salary=" + salary + "]";
+		return "Candidate [id=" + id + ", name=" + name + ", experience=" + experience + ", salary=" + salary
+				+ ", base=" + base + "]";
 	}
 }

@@ -42,36 +42,43 @@ public class HibernateRepository {
 		}
 	}
 
-	public void save(List<Candidate> candidates) {
+	public <T> void save(T t) {
+		tx(session -> session.save(t));
+	}
+
+	public <T> void save(List<T> ts) {
 		tx(session -> {
-			for (Candidate candidate : candidates) {
-				session.save(candidate);
+			for (T t : ts) {
+				session.save(t);
 			}
 			return true;
 		});
 	}
 
-	public List<Candidate> getAll() {
-		return tx(session -> session.createQuery("from Candidate").getResultList());
+	public <T> List<T> getAll(Class cl) {
+		return tx(session -> session.createQuery("select distinct s from " + cl.getName() + " s " + "join fetch s.base b "
+				+ "join fetch b.vacancies v ").getResultList());
 	}
 
-	public Candidate getById(int id) {
+	public <T> Candidate getById(Class cl, int id) {
 		return (Candidate) tx(session -> {
-			Query query = session.createQuery("from Candidate s where s.id = :fId");
+			Query query = session.createQuery("select distinct s from " + cl.getName() + " s " + "join fetch s.base b "
+					+ "join fetch b.vacancies v " + " where s.id = :fId");
 			query.setParameter("fId", 1);
 			return query.uniqueResult();
 		});
 	}
 
-	public Candidate getByName(String name) {
+	public <T> Candidate getByName(Class cl, String name) {
 		return (Candidate) tx(session -> {
-			Query query = session.createQuery("from Candidate s where s.name = :fname");
+			Query query = session.createQuery("select distinct s from " + cl.getName() + " s " + "join fetch s.base b "
+					+ "join fetch b.vacancies v " + " where s.name = :fname");
 			query.setParameter("fname", name);
 			return query.uniqueResult();
 		});
 	}
 
-	public void update(int id,String name, int experience, int salary) {
+	public void update(int id, String name, int experience, int salary) {
 		tx(session -> {
 			Query query = session.createQuery(
 					"update Candidate s set s.name = :newName, s.experience = :newExperience, s.salary = :newSalary where s.id = :fId");
@@ -83,12 +90,11 @@ public class HibernateRepository {
 			return true;
 		});
 	}
-	
-	public void delete(int id) {
+
+	public <T> void delete(Class cl, int id) {
 		tx(session -> {
-			session.createQuery("delete from Candidate where id = :fId")
-	        .setParameter("fId", id)
-	        .executeUpdate();
+			session.createQuery("delete from " + cl.getName() + " where id = :fId").setParameter("fId", id)
+					.executeUpdate();
 			return true;
 		});
 	}

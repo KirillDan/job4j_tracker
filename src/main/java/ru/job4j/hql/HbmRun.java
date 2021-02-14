@@ -8,45 +8,27 @@ import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 
 public class HbmRun {
-    public static void main(String[] args) {
-        final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                .configure().build();
-        try {
-            SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-            Session session = sf.openSession();
-            session.beginTransaction();
-            /*
-            Student one = Student.of("Alex", 21, "Moscow");
-            Student two = Student.of("Nikolay", 28, "Saint-Petersburg");
-            Student three = Student.of("Nikita", 25, "Kaliningrad");
+	public static void main(String[] args) {
+		final StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure().build();
+		Student rsl = null;
+		try {
+			SessionFactory sf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+			Session session = sf.openSession();
+			session.beginTransaction();
 
-            session.save(one);
-            session.save(two);
-            session.save(three);
-            
-            Query query = session.createQuery("from Student s where s.id = :fId");
-            query.setParameter("fId", 1);
-            System.out.println(query.uniqueResult());
-            
-            session.createQuery("update Student s set s.age = :newAge, s.city = :newCity where s.id = :fId")
-            .setParameter("newAge", 22)
-            .setParameter("newCity", "London")
-            .setParameter("fId", 1)
-            .executeUpdate();
-            */
-            
-            session.createQuery("insert into Student (name, age, city) "
-                    + "select concat(s.name, 'NEW'), s.age + 5, s.city  "
-                    + "from Student s where s.id = :fId")
-                    .setParameter("fId", 1)
-                    .executeUpdate();
-            
-            session.getTransaction().commit();
-            session.close();
-        }  catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            StandardServiceRegistryBuilder.destroy(registry);
-        }
-    }
+			rsl = session
+					.createQuery("select distinct st from Student st " + "join fetch st.account a "
+							+ "join fetch a.books b " + "where st.id = :sId", Student.class)
+					.setParameter("sId", 1).uniqueResult();
+
+			session.getTransaction().commit();
+			session.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			StandardServiceRegistryBuilder.destroy(registry);
+		}
+
+		System.out.println(rsl);
+	}
 }
